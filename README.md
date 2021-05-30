@@ -1,6 +1,6 @@
-# gh
+# Xananoids
 
-A new Flutter project.
+Xananoids is a technical club.This page serve as a interaction medium with the people of Xananoids.
 
 ## Getting Started
 
