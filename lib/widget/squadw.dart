@@ -39,8 +39,8 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controller.dispose();
+    super.dispose();
   }
 
   @override
