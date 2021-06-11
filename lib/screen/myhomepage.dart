@@ -17,6 +17,7 @@ class MyHomePage extends StatelessWidget {
           elevation: 2.5,
           shadowColor: Colors.black38,
           title: TabBar(
+            isScrollable: true,
             labelColor: Colors.black54,
             labelStyle: TextStyle(
               fontWeight: FontWeight.bold,
