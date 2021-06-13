@@ -81,8 +81,9 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
                 padding: EdgeInsets.all(9),
                 alignment: Alignment.center,
                 child: Wrap(
-                  runSpacing: 30,
-                  crossAxisAlignment: WrapCrossAlignment.end,
+                  direction: Axis.vertical,
+                  // runSpacing: 30,
+                  // crossAxisAlignment: WrapCrossAlignment.end,
                   alignment: WrapAlignment.spaceEvenly,
                   children: [
                     ...(_name
