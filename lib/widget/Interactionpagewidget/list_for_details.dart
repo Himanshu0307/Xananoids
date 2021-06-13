@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
 
 class ListForDetails extends StatelessWidget {
-  final Size pagesize;
-  ListForDetails(this.pagesize);
+  Size pagesize;
   @override
   Widget build(BuildContext context) {
+    pagesize = MediaQuery.of(context).size;
+
     return Container(
       padding: const EdgeInsets.all(10),
-      height: pagesize.height,
+      height: pagesize.height * 0.8,
       width: pagesize.width,
       child: ListView.builder(
         itemBuilder: (ctx, i) => Card(
           elevation: 5,
           child: Container(
-            // foregroundDecoration:
-            // BoxDecoration(backgroundBlendMode: BlendMode.softLight),
-            height: pagesize.height * 0.8,
+            height: pagesize.height * 0.7,
             width: pagesize.width,
             child: GridTile(
               child: Container(),
               header: SizedBox(
-                height: pagesize.height * 0.1,
+                height: pagesize.height * 0.15,
                 width: pagesize.width,
                 child: GridTileBar(
-                  trailing:
-                      IconButton(onPressed: () {}, icon: Icon(Icons.report)),
                   title: Text(
                     'Title : Title$i',
                     style: TextStyle(color: Colors.black),
@@ -34,7 +31,7 @@ class ListForDetails extends StatelessWidget {
                 ),
               ),
               footer: SizedBox(
-                  height: pagesize.height * 0.6,
+                  height: pagesize.height * 0.55,
                   width: pagesize.width,
                   child: Text('This is a post shared by Admin')),
             ),

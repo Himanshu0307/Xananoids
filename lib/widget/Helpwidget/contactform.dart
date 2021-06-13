@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactForm extends StatelessWidget {
   ContactForm(this._formsize);
@@ -24,7 +25,17 @@ class ContactForm extends StatelessWidget {
             decoration: InputDecoration(labelText: 'Subject'),
           ),
           TextFormField(),
-          TextButton(onPressed: null, child: Text("Send"))
+          TextButton(
+              onPressed: () {
+                Uri _email = Uri(
+                    scheme: 'mailto',
+                    path: 'himanshusharma.cse23@jecrc.ac.in',
+                    queryParameters: {
+                      'subject': 'Example Subject & Symbols are allowed!'
+                    });
+                launch(_email.toString());
+              },
+              child: Text("Send"))
         ],
       )),
     );
