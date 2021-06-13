@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../widget/squadw.dart';
 import '../widget/about.dart';
 import '../widget/help.dart';
@@ -25,7 +26,7 @@ class MyHomePage extends StatelessWidget {
             ),
             tabs: [
               Tab(
-                text: 'About',
+                text: 'Glimpses',
               ),
               Tab(
                 text: 'Squad',
@@ -51,7 +52,11 @@ class MyHomePage extends StatelessWidget {
               Text(
                 'Follow Us on Social Handler',
               ),
-              IconButton(icon: Icon(Icons.ac_unit_outlined), onPressed: null),
+              IconButton(
+                  icon: Icon(Icons.ac_unit_outlined),
+                  onPressed: () {
+                    launch('https://www.instagram.com');
+                  }),
               IconButton(
                   icon: Icon(Icons.access_alarms_sharp), onPressed: null),
               IconButton(

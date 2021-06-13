@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 
 class ListForDetails extends StatelessWidget {
   Size pagesize;
+  List<String> get postdoc {
+    return [];
+  }
+
   @override
   Widget build(BuildContext context) {
     pagesize = MediaQuery.of(context).size;
@@ -20,9 +24,8 @@ class ListForDetails extends StatelessWidget {
               return Text('Loading...');
             if (snap.hasError) return Text('Please Try again later');
             var _data = snap.data as QuerySnapshot<Map<String, dynamic>>;
-            _data.docs.forEach((element) {
-              print(element.data());
-            });
+            int length = _data.docs.length;
+
             return ListView.builder(
               itemBuilder: (ctx, i) => Card(
                 elevation: 5,
@@ -36,10 +39,14 @@ class ListForDetails extends StatelessWidget {
                       width: pagesize.width,
                       child: GridTileBar(
                         title: Text(
-                          'Title : Title$i',
+                          'Title : ' +
+                              _data.docs[length - (i + 1)].data()['Title'],
                           style: TextStyle(color: Colors.black),
                         ),
-                        subtitle: Text('Postid : #post$i',
+                        subtitle: Text(
+                            'Description : ' +
+                                _data.docs[length - (i + 1)]
+                                    .data()['Description'],
                             style: TextStyle(color: Colors.black)),
                       ),
                     ),
@@ -50,7 +57,7 @@ class ListForDetails extends StatelessWidget {
                   ),
                 ),
               ),
-              itemCount: 5,
+              itemCount: _data.docs.length,
             );
           }),
     );
