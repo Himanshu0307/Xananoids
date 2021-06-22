@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:gh/widget/Aboutwidget/function.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +44,21 @@ class _ImageBackState extends State<ImageBack>
     super.didChangeDependencies();
   }
 
+  int transition(_controller, i, _name) {
+    int loop = i;
+    _controller.forward().whenComplete(() async {
+      Timer(Duration(seconds: 5), () {
+        _controller.reverse();
+        loop++;
+        print(loop.toString());
+        // if (_name.length - 1 == loop) loop = 0;
+      });
+      // print(i);
+    });
+    print('Out: ' + loop.toString());
+    return loop;
+  }
+
   @override
   Widget build(BuildContext context) {
     //temp work
@@ -61,13 +77,7 @@ class _ImageBackState extends State<ImageBack>
             });
 
             return TimerBuilder.periodic(Duration(seconds: 11), builder: (ctx) {
-              _controller.forward().whenComplete(() async {
-                Timer(Duration(seconds: 5), () {
-                  _controller.reverse();
-                  i++;
-                  if (_name.length - 1 == i) i = 0;
-                });
-              });
+              i = transition(_controller, i, _name);
 
               return Stack(
                 children: [
@@ -87,8 +97,19 @@ class _ImageBackState extends State<ImageBack>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       IconButton(
-                          onPressed: null, icon: Icon(Icons.skip_previous)),
-                      IconButton(onPressed: null, icon: Icon(Icons.skip_next))
+                          onPressed: () {
+                            setState(() {
+                              i = transition(_controller, i - 1, _name);
+                            });
+                          },
+                          icon: Icon(Icons.skip_previous)),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              i = transition(_controller, i + 1, _name);
+                            });
+                          },
+                          icon: Icon(Icons.skip_next))
                     ],
                   )
                 ],
