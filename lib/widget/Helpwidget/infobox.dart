@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gh/data/helpdata.dart';
 
 class InfoBox extends StatelessWidget {
-  // const InfoBox({ Key? key }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     Size _pagesize = MediaQuery.of(context).size;
@@ -31,7 +29,7 @@ class InfoBox extends StatelessWidget {
                     Text(actions[index]['subtitle']),
                     TextButton(
                       child: Text(actions[index]['button_text']),
-                      onPressed: null,
+                      onPressed: actions[index]['fun_to_call'],
                     )
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timer_builder/timer_builder.dart';
@@ -43,10 +44,56 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  //Function to show Modal Sheet
+  void modalsheetopen(
+      BuildContext ctx, Map<String, Object> data, Size _pagesize) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: ctx,
+        builder: (ctx) {
+          return Container(
+            color: Colors.transparent,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 70,
+                  backgroundImage: NetworkImage(data['URL']),
+                ),
+                ClipRRect(
+                  child: Container(
+                    padding: const EdgeInsets.all(14),
+                    margin: EdgeInsets.only(top: 10),
+                    color: Colors.white70,
+                    width: _pagesize.width * 0.8,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          data['Name'],
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        Text(data['Year']),
+                        Wrap(
+                          spacing: 15,
+                          children: [
+                            ...((data['Field'] as List<dynamic>)
+                                .map((e) => Text('\u2022' + e.toString())))
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    //temp work
-
     Size pagesize = MediaQuery.of(context).size;
 
     return FutureBuilder(
@@ -60,7 +107,8 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
               _name.add({
                 'Name': element.id,
                 'Year': element.data()['Year'],
-                'URL': element.data()['URL']
+                'URL': element.data()['URL'],
+                'Field': element.data()['Field']
               });
             });
 
@@ -68,10 +116,10 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
               _controller.forward().whenComplete(() async {
                 Timer(Duration(seconds: 5), () {
                   _controller.reverse();
-                  if (_name.length % 4 == 0 &&
-                      i == (_name.length / 4).truncate()) i = -1;
-                  if (_name.length % 4 != 0 &&
-                      i == (_name.length / 4).truncate() + 1) i = -1;
+                  if (_name.length % 3 == 0 &&
+                      i == (_name.length / 3).truncate()) i = -1;
+                  if (_name.length % 3 != 0 &&
+                      i == (_name.length / 3).truncate() + 1) i = -1;
                   i++;
                 });
               });
@@ -80,56 +128,58 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
                 width: pagesize.width,
                 padding: EdgeInsets.all(9),
                 alignment: Alignment.center,
-                child: Wrap(
-                  direction: Axis.vertical,
-                  // runSpacing: 30,
-                  // crossAxisAlignment: WrapCrossAlignment.end,
-                  alignment: WrapAlignment.spaceEvenly,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ...(_name
-                        .skip(i * 4)
-                        .take(4)
-                        .map((e) => FadeTransition(
-                              opacity: _animation,
-                              child: SizedBox(
-                                height: pagesize.height * 0.2,
-                                width: pagesize.width * 0.4,
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      fit: FlexFit.loose,
-                                      flex: 1,
-                                      child: CircleAvatar(
-                                        radius: pagesize.width * 0.1,
-                                        backgroundImage: NetworkImage(
-                                          e['URL'],
-                                        ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: SizedBox(
-                                        height: pagesize.height * 0.1,
-                                        width: pagesize.width * 0.2,
-                                        child: Card(
-                                          borderOnForeground: true,
-                                          child: ListTile(
-                                            contentPadding: EdgeInsets.all(2),
-                                            minVerticalPadding: 6,
-                                            title: Text(
-                                              e['Name'].toString(),
-                                              style: TextStyle(
-                                                  color: Colors.brown),
-                                            ),
-                                            subtitle: Text(e['Year'],
-                                                style: TextStyle(
-                                                    color: Colors.brown)),
+                        .skip(i * 3)
+                        .take(3)
+                        .map((e) => GestureDetector(
+                              onTap: () => modalsheetopen(ctx, e, pagesize),
+                              child: FadeTransition(
+                                opacity: _animation,
+                                child: SizedBox(
+                                  height: pagesize.height * 0.2,
+                                  width: pagesize.width * 0.8,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Flexible(
+                                        fit: FlexFit.loose,
+                                        flex: 1,
+                                        child: CircleAvatar(
+                                          radius: pagesize.width * 0.3,
+                                          backgroundImage: NetworkImage(
+                                            e['URL'],
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: pagesize.height * 0.2,
+                                          width: pagesize.width * 0.55,
+                                          child: Card(
+                                            borderOnForeground: true,
+                                            child: ListTile(
+                                              contentPadding: EdgeInsets.all(2),
+                                              minVerticalPadding: 6,
+                                              title: Text(
+                                                e['Name'].toString(),
+                                                style: TextStyle(
+                                                    color: Colors.brown),
+                                              ),
+                                              subtitle: Text(e['Year'],
+                                                  style: TextStyle(
+                                                      color: Colors.brown)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ))
