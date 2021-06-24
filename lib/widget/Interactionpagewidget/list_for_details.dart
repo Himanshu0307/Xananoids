@@ -53,7 +53,17 @@ class ListForDetails extends StatelessWidget {
                     footer: SizedBox(
                         height: pagesize.height * 0.55,
                         width: pagesize.width,
-                        child: Text('This is a post shared by Admin')),
+                        child: Wrap(
+                          children: [
+                            ...((_data.docs[length - (i + 1)].data()['Imageurl']
+                                    as List<dynamic>)
+                                .map((e) => Image.network(
+                                      e,
+                                      height: pagesize.height * 0.22,
+                                      scale: 1,
+                                    ))).toList()
+                          ],
+                        )),
                   ),
                 ),
               ),

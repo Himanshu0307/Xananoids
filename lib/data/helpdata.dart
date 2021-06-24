@@ -23,33 +23,6 @@ final List<Map<String, Object>> actions = [
       Url_launcher(url: 'mailto:Xananoids@gmail.com');
     }
   },
-  {
-    'Icon': SocialIcon.github_circled,
-    'title': 'Github',
-    'subtitle': 'View Our Projects at Github',
-    'button_text': 'Visit Github Profile',
-    'fun_to_call': () {
-      Url_launcher(url: 'https://www.Github.com');
-    }
-  },
-  {
-    'Icon': SocialIcon.linkedin_circled,
-    'title': 'Linkedin',
-    'subtitle': 'Follow us on LinkedIn for more Tech Stuffs',
-    'button_text': 'View Linkedin Profile',
-    'fun_to_call': () {
-      Url_launcher(url: 'https://www.linkedin.com');
-    }
-  },
-  {
-    'Icon': SocialIcon.instagram,
-    'title': 'Instagram',
-    'subtitle': 'Contact us on Instagram',
-    'button_text': 'Visit Instagram Page',
-    'fun_to_call': () {
-      Url_launcher(url: 'https://www.instagram.com');
-    }
-  }
 ];
 
 void Url_launcher({@required String url, BuildContext context}) async {

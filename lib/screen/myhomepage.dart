@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gh/fonts/social_icon_icons.dart';
+import 'package:gh/widget/about.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widget/squadw.dart';
-import '../widget/about.dart';
+import '../widget/glimpses.dart';
 import '../widget/help.dart';
 import '../widget/interactionpage.dart';
 
@@ -10,8 +11,8 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size pagesize = MediaQuery.of(context).size;
     return DefaultTabController(
-      length: 4,
-      initialIndex: 3,
+      length: 5,
+      initialIndex: 1,
       child: Scaffold(
         backgroundColor: Colors.black54,
         appBar: AppBar(
@@ -27,7 +28,10 @@ class MyHomePage extends StatelessWidget {
             ),
             tabs: [
               Tab(
-                text: 'Glimpses',
+                text: 'About',
+              ),
+              Tab(
+                text: 'Gallery',
               ),
               Tab(
                 text: 'Squad',
@@ -42,7 +46,7 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: [About(), Squadw(), InteractionPage(), Help()],
+          children: [About(), Glimpses(), Squadw(), InteractionPage(), Help()],
         ),
         bottomNavigationBar: Container(
           height: pagesize.height * 0.1,
@@ -51,17 +55,17 @@ class MyHomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                'Follow Us on Social Handler',
+                'Connect with us',
               ),
               IconButton(
                   icon: Icon(SocialIcon.instagram),
                   onPressed: () {
-                    launch('https://www.instagram.com');
+                    launch('https://www.instagram.com/xananoidsclub/');
                   }),
               IconButton(
                   icon: Icon(SocialIcon.linkedin),
                   onPressed: () {
-                    launch('https://www.linkedin.com');
+                    launch('https://www.linkedin.com/in/xananoids-club/');
                   }),
               IconButton(
                   icon: Icon(SocialIcon.github_circled),

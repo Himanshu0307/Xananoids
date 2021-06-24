@@ -8,36 +8,36 @@ class InfoBox extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.all(10),
         alignment: Alignment.center,
-        height: _pagesize.height * 0.3,
+        height: _pagesize.height * 0.7,
         width: _pagesize.width * 0.9,
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return Card(
-              elevation: 5,
-              color: Colors.transparent,
-              child: SizedBox(
-                height: _pagesize.height * 0.15,
-                width: _pagesize.width * 0.7,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(actions[index]['Icon']),
-                    Text(
-                      actions[index]['title'],
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(actions[index]['subtitle']),
-                    TextButton(
-                      child: Text(actions[index]['button_text']),
-                      onPressed: actions[index]['fun_to_call'],
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-          itemCount: 5,
-          scrollDirection: Axis.horizontal,
+        child: Wrap(
+          children: [
+            ...(actions
+                .map((e) => Card(
+                      elevation: 5,
+                      color: Colors.transparent,
+                      child: SizedBox(
+                        height: _pagesize.height * 0.2,
+                        width: _pagesize.width * 0.7,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(e['Icon']),
+                            Text(
+                              e['title'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(e['subtitle']),
+                            ElevatedButton(
+                              child: Text(e['button_text']),
+                              onPressed: e['fun_to_call'],
+                            )
+                          ],
+                        ),
+                      ),
+                    ))
+                .toList()),
+          ],
         ));
   }
 }

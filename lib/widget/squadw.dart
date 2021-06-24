@@ -1,8 +1,5 @@
-import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:timer_builder/timer_builder.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
@@ -15,34 +12,18 @@ class Squadw extends StatefulWidget {
 class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
   //static variable
   var firedata = FirebaseFirestore.instance.collection('Squad');
-  List _name = [];
+  List<Map<String, Object>> _name = [];
   int i = 0;
-  AnimationController _controller;
-  Animation<double> _animation;
 
   // user defined Functions
 
   @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-        vsync: this,
-        duration: Duration(seconds: 3),
-        reverseDuration: Duration(seconds: 1));
-    _animation = Tween<double>(begin: 0, end: 1)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   //Function to show Modal Sheet
   void modalsheetopen(
@@ -77,8 +58,8 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
                         Wrap(
                           spacing: 15,
                           children: [
-                            ...((data['Field'] as List<dynamic>)
-                                .map((e) => Text('\u2022' + e.toString())))
+                            ...((data['Field'] as List<dynamic>).map(
+                                (_name) => Text('\u2022' + _name.toString())))
                           ],
                         )
                       ],
@@ -111,83 +92,56 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
                 'Field': element.data()['Field']
               });
             });
-
-            return TimerBuilder.periodic(Duration(seconds: 11), builder: (ctx) {
-              _controller.forward().whenComplete(() async {
-                Timer(Duration(seconds: 5), () {
-                  _controller.reverse();
-                  if (_name.length % 3 == 0 &&
-                      i == (_name.length / 3).truncate()) i = -1;
-                  if (_name.length % 3 != 0 &&
-                      i == (_name.length / 3).truncate() + 1) i = -1;
-                  i++;
-                });
-              });
-              return Container(
-                height: pagesize.height * 0.8,
-                width: pagesize.width,
-                padding: EdgeInsets.all(9),
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ...(_name
-                        .skip(i * 3)
-                        .take(3)
-                        .map((e) => GestureDetector(
-                              onTap: () => modalsheetopen(ctx, e, pagesize),
-                              child: FadeTransition(
-                                opacity: _animation,
-                                child: SizedBox(
-                                  height: pagesize.height * 0.2,
-                                  width: pagesize.width * 0.8,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Flexible(
-                                        fit: FlexFit.loose,
-                                        flex: 1,
-                                        child: CircleAvatar(
-                                          radius: pagesize.width * 0.3,
-                                          backgroundImage: NetworkImage(
-                                            e['URL'],
-                                          ),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        fit: FlexFit.tight,
-                                        flex: 1,
-                                        child: SizedBox(
-                                          height: pagesize.height * 0.2,
-                                          width: pagesize.width * 0.55,
-                                          child: Card(
-                                            borderOnForeground: true,
-                                            child: ListTile(
-                                              contentPadding: EdgeInsets.all(2),
-                                              minVerticalPadding: 6,
-                                              title: Text(
-                                                e['Name'].toString(),
-                                                style: TextStyle(
-                                                    color: Colors.brown),
-                                              ),
-                                              subtitle: Text(e['Year'],
-                                                  style: TextStyle(
-                                                      color: Colors.brown)),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+            return ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (ctx, index) => GestureDetector(
+                onTap: () => modalsheetopen(ctx, _name[index], pagesize),
+                child: Container(
+                  height: pagesize.height * 0.3,
+                  child: SizedBox(
+                    height: pagesize.height * 0.2,
+                    width: pagesize.width * 0.8,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 1,
+                          child: CircleAvatar(
+                            radius: 100,
+                            backgroundImage: NetworkImage(
+                              _name[index]['URL'],
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child: SizedBox(
+                            height: pagesize.height * 0.2,
+                            width: pagesize.width * 0.55,
+                            child: Card(
+                              borderOnForeground: true,
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(2),
+                                minVerticalPadding: 6,
+                                title: Text(
+                                  _name[index]['Name'],
+                                  style: TextStyle(color: Colors.brown),
                                 ),
+                                subtitle: Text(_name[index]['Year'],
+                                    style: TextStyle(color: Colors.brown)),
                               ),
-                            ))
-                        .toList())
-                  ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              );
-            });
+              ),
+              itemCount: _name.length,
+            );
           }
           return Center(
               child: Text(
