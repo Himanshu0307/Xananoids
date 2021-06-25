@@ -1,9 +1,7 @@
-import 'dart:async';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:gh/widget/Aboutwidget/function.dart';
-import 'package:timer_builder/timer_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:gh/screen/fullimage.dart';
 
 class ImageBack extends StatefulWidget {
   @override
@@ -27,30 +25,39 @@ class _ImageBackState extends State<ImageBack>
           var _data = data.data as QuerySnapshot<Map<String, dynamic>>;
           if (data.connectionState == ConnectionState.done) {
             _data.docs.forEach((element) {
-              print(element.data());
+              // print(element.data()['ImageUrl'][0]);
               _name.add({'URL': element.data()['ImageUrl']});
+              // print(_name);
             });
             return SizedBox(
               height: pagesize.height * 0.6,
               width: pagesize.width * 0.8,
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    crossAxisSpacing: 30,
-                    mainAxisExtent: 30,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    mainAxisExtent: 200,
                     childAspectRatio: 1,
-                    maxCrossAxisExtent: pagesize.height * 0.3),
+                    maxCrossAxisExtent: pagesize.height * 0.6),
                 itemBuilder: (ctx, index) {
-                  return Image.network(
-                    _name[0]['URL'][index],
-                    width: 50,
-                    scale: 1,
-                    loadingBuilder: (ctx, _, chuhnk) {
-                      return CircularProgressIndicator();
+                  return InkWell(
+                    onTap: () {
+                      showFullImage(
+                          url: _name[0]['URL'][index], context: context);
                     },
+                    child: Container(
+                        width: 660,
+                        height: 660,
+                        child: Image.network(_name[0]['URL'][index],
+                            fit: BoxFit.fill,
+                            loadingBuilder: (ctx, child, loading) {
+                          if (loading == null) return child;
+                          return Center(child: CircularProgressIndicator());
+                        })),
                   );
                   // return Container();
                 },
-                itemCount: _name.length,
+                itemCount: _name[0]['URL'].length,
               ),
             );
           }

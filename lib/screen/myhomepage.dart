@@ -37,7 +37,7 @@ class MyHomePage extends StatelessWidget {
                 text: 'Squad',
               ),
               Tab(
-                text: 'Interaction Page',
+                text: 'Projects',
               ),
               Tab(
                 text: 'Contact Us',

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gh/screen/fullimage.dart';
 
 class ListForDetails extends StatelessWidget {
   Size pagesize;
@@ -11,7 +12,7 @@ class ListForDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     pagesize = MediaQuery.of(context).size;
     var firedata = FirebaseFirestore.instance
-        .collection('Interaction')
+        .collection('Projects')
         .snapshots(includeMetadataChanges: true);
     return Container(
       padding: const EdgeInsets.all(10),
@@ -57,10 +58,21 @@ class ListForDetails extends StatelessWidget {
                           children: [
                             ...((_data.docs[length - (i + 1)].data()['Imageurl']
                                     as List<dynamic>)
-                                .map((e) => Image.network(
-                                      e,
-                                      height: pagesize.height * 0.22,
-                                      scale: 1,
+                                .map((e) => InkWell(
+                                      onTap: () {
+                                        showFullImage(url: e, context: context);
+                                      },
+                                      child: Image.network(
+                                        e,
+                                        height: pagesize.height * 0.22,
+                                        scale: 1,
+                                        loadingBuilder: (ctx, child, loading) {
+                                          if (loading == null) return child;
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        },
+                                      ),
                                     ))).toList()
                           ],
                         )),
