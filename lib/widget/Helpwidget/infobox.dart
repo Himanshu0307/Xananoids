@@ -17,7 +17,7 @@ class InfoBox extends StatelessWidget {
                       elevation: 5,
                       color: Colors.transparent,
                       child: SizedBox(
-                        height: _pagesize.height * 0.2,
+                        height: _pagesize.height * 0.3,
                         width: _pagesize.width * 0.7,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

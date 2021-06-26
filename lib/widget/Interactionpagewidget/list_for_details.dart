@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gh/screen/fullimage.dart';
+import 'package:gh/widget/Interactionpagewidget/cardproject.dart';
 
 class ListForDetails extends StatelessWidget {
   Size pagesize;
-  List<String> get postdoc {
-    return [];
-  }
+  List<Map> postdoc = [];
 
   @override
   Widget build(BuildContext context) {
@@ -14,74 +13,40 @@ class ListForDetails extends StatelessWidget {
     var firedata = FirebaseFirestore.instance
         .collection('Projects')
         .snapshots(includeMetadataChanges: true);
-    return Container(
-      padding: const EdgeInsets.all(10),
-      height: pagesize.height * 0.8,
-      width: pagesize.width,
-      child: StreamBuilder(
-          stream: firedata,
-          builder: (ctx, snap) {
-            if (snap.connectionState == ConnectionState.waiting)
-              return Text('Loading...');
-            if (snap.hasError) return Text('Please Try again later');
-            var _data = snap.data as QuerySnapshot<Map<String, dynamic>>;
-            int length = _data.docs.length;
-
-            return ListView.builder(
-              itemBuilder: (ctx, i) => Card(
-                elevation: 5,
-                child: Container(
-                  height: pagesize.height * 0.7,
-                  width: pagesize.width,
-                  child: GridTile(
-                    child: Container(),
-                    header: SizedBox(
-                      height: pagesize.height * 0.15,
-                      width: pagesize.width,
-                      child: GridTileBar(
-                        title: Text(
-                          'Title : ' +
-                              _data.docs[length - (i + 1)].data()['Title'],
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        subtitle: Text(
-                            'Description : ' +
-                                _data.docs[length - (i + 1)]
-                                    .data()['Description'],
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                    ),
-                    footer: SizedBox(
-                        height: pagesize.height * 0.55,
-                        width: pagesize.width,
-                        child: Wrap(
-                          children: [
-                            ...((_data.docs[length - (i + 1)].data()['Imageurl']
-                                    as List<dynamic>)
-                                .map((e) => InkWell(
-                                      onTap: () {
-                                        showFullImage(url: e, context: context);
-                                      },
-                                      child: Image.network(
-                                        e,
-                                        height: pagesize.height * 0.22,
-                                        scale: 1,
-                                        loadingBuilder: (ctx, child, loading) {
-                                          if (loading == null) return child;
-                                          return Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        },
-                                      ),
-                                    ))).toList()
-                          ],
-                        )),
-                  ),
-                ),
-              ),
-              itemCount: _data.docs.length,
+    return StreamBuilder(
+        stream: firedata,
+        builder: (ctx, snap) {
+          if (snap.connectionState == ConnectionState.waiting)
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          }),
-    );
+          if (snap.hasError) return Text('Please Try again later');
+
+          (snap.data as QuerySnapshot<Map<String, dynamic>>)
+              .docs
+              .forEach((element) {
+            postdoc.add({
+              'Url': element.data()['Imageurl'][0],
+              'Description': element.data()['Description'],
+              'Title': element.data()['Title']
+            });
+          });
+          print(postdoc);
+          return Container(
+            height: pagesize.height * 0.5,
+            width: pagesize.width * 0.4,
+            child: PageView.builder(
+              scrollDirection: Axis.vertical,
+              itemBuilder: (ctx, index) {
+                return CardProject(
+                  title: postdoc[index]['Title'],
+                  imageUrl: postdoc[index]['Url'],
+                  description: postdoc[index]['Description'],
+                );
+              },
+              itemCount: postdoc.length,
+            ),
+          );
+        });
   }
 }
