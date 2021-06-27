@@ -7,12 +7,13 @@ class CardProject extends StatelessWidget {
   CardProject({this.imageUrl, this.title, this.description});
   @override
   Widget build(BuildContext context) {
+    Size _pagesize = MediaQuery.of(context).size;
     return Card(
         color: Colors.transparent,
         elevation: 5,
         child: SizedBox(
-          height: 50,
-          width: 50,
+          height: _pagesize.height * 0.6,
+          width: _pagesize.width * 0.8,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
