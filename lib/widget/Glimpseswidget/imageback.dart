@@ -28,7 +28,7 @@ class _ImageBackState extends State<ImageBack>
             _data.docs.forEach((element) {
               _name.add({'URL': element.data()['ImageUrl']});
             });
-            return CuroselImageView(_name[0]['URL']);
+            return CuroselImageView(_name);
           }
           return Center(child: CircularProgressIndicator());
         });
