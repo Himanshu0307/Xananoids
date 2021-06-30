@@ -130,53 +130,63 @@ class _SquadwState extends State<Squadw> with SingleTickerProviderStateMixin {
                 'Field': element.data()['Field']
               });
             });
-            return ListView.builder(
-              padding: EdgeInsets.all(20),
-              shrinkWrap: true,
-              itemBuilder: (ctx, index) => GestureDetector(
-                onTap: () => modalsheetopen(ctx, _name[index], pagesize),
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  height: pagesize.height * 0.35,
-                  child: SizedBox(
-                    height: pagesize.height * 0.2,
-                    width: pagesize.width * 0.8,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Flexible(
-                          fit: FlexFit.loose,
-                          flex: 1,
-                          child: CircleAvatar(
-                            radius: 100,
-                            backgroundImage: NetworkImage(
-                              _name[index]['URL'],
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          flex: 1,
-                          child: Card(
-                            borderOnForeground: true,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(3),
-                              minVerticalPadding: 4,
-                              title: Text(
-                                _name[index]['Name'],
-                                style: TextStyle(color: Colors.brown),
+            return Stack(
+              children: [
+                Image.asset(
+                  'lib/assets/network.gif',
+                  fit: BoxFit.fill,
+                  height: pagesize.height,
+                  width: pagesize.width,
+                ),
+                ListView.builder(
+                  padding: EdgeInsets.all(20),
+                  shrinkWrap: true,
+                  itemBuilder: (ctx, index) => GestureDetector(
+                    onTap: () => modalsheetopen(ctx, _name[index], pagesize),
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      height: pagesize.height * 0.35,
+                      child: SizedBox(
+                        height: pagesize.height * 0.2,
+                        width: pagesize.width * 0.8,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Flexible(
+                              fit: FlexFit.loose,
+                              flex: 1,
+                              child: CircleAvatar(
+                                radius: 100,
+                                backgroundImage: NetworkImage(
+                                  _name[index]['URL'],
+                                ),
                               ),
-                              subtitle: Text(_name[index]['Year'],
-                                  style: TextStyle(color: Colors.brown)),
                             ),
-                          ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: 1,
+                              child: Card(
+                                borderOnForeground: true,
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.all(3),
+                                  minVerticalPadding: 4,
+                                  title: Text(
+                                    _name[index]['Name'],
+                                    style: TextStyle(color: Colors.brown),
+                                  ),
+                                  subtitle: Text(_name[index]['Year'],
+                                      style: TextStyle(color: Colors.brown)),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
+                  itemCount: _name.length,
                 ),
-              ),
-              itemCount: _name.length,
+              ],
             );
           }
           return Center(child: CircularProgressIndicator());
