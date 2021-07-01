@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:gh/widget/Aboutwidget/function.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +44,21 @@ class _ImageBackState extends State<ImageBack>
     super.didChangeDependencies();
   }
 
+  int transition(_controller, i, _name) {
+    int loop = i;
+    _controller.forward().whenComplete(() async {
+      Timer(Duration(seconds: 5), () {
+        _controller.reverse();
+        loop++;
+        print(loop.toString());
+        // if (_name.length - 1 == loop) loop = 0;
+      });
+      // print(i);
+    });
+    print('Out: ' + loop.toString());
+    return loop;
+  }
+
   @override
   Widget build(BuildContext context) {
     //temp work
@@ -52,26 +68,16 @@ class _ImageBackState extends State<ImageBack>
     return FutureBuilder(
         future: firedata.get(),
         builder: (ctx, data) {
+          if (data.hasError) return Text("Please Try again Later..");
+          var _data = data.data as QuerySnapshot<Map<String, dynamic>>;
           if (data.connectionState == ConnectionState.done) {
-            var _data = data.data as QuerySnapshot<Map<String, dynamic>>;
             _data.docs.forEach((element) {
-              // print(element.id);
-              // print(element.data());
-              _name.add({
-                'Quotes': element.data()['Quotes'],
-                'URL': element.data()['ImageUrl']
-              });
+              print(element.data());
+              _name.add({'URL': element.data()['ImageUrl']});
             });
-            print(_name);
 
             return TimerBuilder.periodic(Duration(seconds: 11), builder: (ctx) {
-              _controller.forward().whenComplete(() async {
-                Timer(Duration(seconds: 5), () {
-                  _controller.reverse();
-                  i++;
-                  if (_name.length - 1 == i) i = 0;
-                });
-              });
+              i = transition(_controller, i, _name);
 
               return Stack(
                 children: [
@@ -86,31 +92,31 @@ class _ImageBackState extends State<ImageBack>
                       ),
                     ),
                   ),
-                  FadeTransition(
-                    opacity: _animationfade,
-                    child: Container(
-                      height: pagesize.height * 0.8,
-                      width: pagesize.width,
-                      alignment: Alignment.bottomCenter,
-                      child: Text(
-                        _name[i]['Quotes'],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 50,
-                            color: Colors.white70,
-                            fontStyle: FontStyle.italic),
-                      ),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              i = transition(_controller, i - 1, _name);
+                            });
+                          },
+                          icon: Icon(Icons.skip_previous)),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              i = transition(_controller, i + 1, _name);
+                            });
+                          },
+                          icon: Icon(Icons.skip_next))
+                    ],
                   )
                 ],
               );
             });
           }
-          return Center(
-              child: Text(
-            'Please wait while loading...',
-            style: TextStyle(fontSize: 30),
-          ));
+          return Text('Please Wait while loading');
         });
   }
 }

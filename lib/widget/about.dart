@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:gh/widget/imageback.dart';
+import 'package:gh/widget/Aboutwidget/imageback.dart';
 
 class About extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -13,17 +13,6 @@ class About extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           ImageBack(),
-          Column(
-            children: [
-              Text(
-                'Hack The World',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 50,
-                    color: Colors.white70),
-              ),
-            ],
-          )
         ],
       ),
     );
